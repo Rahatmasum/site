@@ -1,1 +1,188 @@
-<h1>index</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coming Soon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0c29;
+      --text: #ffffff;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Big bright orb to show off the glass blur */
+    #blob {
+      background: linear-gradient(to right, #ff00cc, #333399);
+      height: 50vw;
+      aspect-ratio: 1;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      translate: -50% -50%;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: 1;
+      opacity: 0.8;
+      pointer-events: none;
+      animation: rotate 15s infinite linear;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.1); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      perspective: 1000px; 
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* True Glassmorphism Card */
+    .card {
+      /* Sheer background */
+      background: rgba(255, 255, 255, 0.05); 
+      /* Heavy blur */
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      /* Shiny glass edges */
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.3);
+      border-left: 1px solid rgba(255, 255, 255, 0.3);
+      
+      border-radius: 30px;
+      padding: 4rem 3rem;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      transform: translateZ(30px); 
+    }
+
+    h1 {
+      font-size: clamp(3rem, 5vw, 5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      transform: translateZ(60px); 
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 400;
+      transform: translateZ(40px);
+    }
+
+    .btn {
+      margin-top: 2.5rem;
+      padding: 16px 40px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #000;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      transform: translateZ(50px);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .btn:hover {
+      background: #fff;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+      transform: translateZ(70px) scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="blob"></div>
+
+  <div class="container" id="container">
+    <div class="card" id="card">
+      <div class="badge">Version 2.0</div>
+      <h1>Almost <br>There.</h1>
+      <p>A new digital experience is dropping soon.</p>
+      <button class="btn">Stay Tuned</button>
+    </div>
+  </div>
+
+  <script>
+    const blob = document.getElementById("blob");
+    const container = document.getElementById("container");
+    const card = document.getElementById("card");
+
+    // Fluid Orb
+    window.addEventListener("pointermove", (e) => {
+      const { clientX, clientY } = e;
+      blob.animate({
+        left: `${clientX}px`,
+        top: `${clientY}px`
+      }, { 
+        duration: 3000, 
+        fill: "forwards" 
+      });
+    });
+
+    // 3D Card Tilt
+    container.addEventListener("mousemove", (e) => {
+      const xAxis = (window.innerWidth / 2 - e.pageX) / 25; 
+      const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+      card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    });
+
+    // Reset card
+    container.addEventListener("mouseleave", () => {
+      card.style.transition = "transform 0.5s ease";
+      card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+      setTimeout(() => {
+        card.style.transition = "transform 0.1s ease-out";
+      }, 500);
+    });
+  </script>
+</body>
+</html>
